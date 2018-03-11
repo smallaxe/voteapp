@@ -6,3 +6,4 @@ Run docker-compose:
 
 Go to http://localhost:3000/
 
+Live demo: http://77.55.214.156:3000
