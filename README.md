@@ -4,4 +4,5 @@ Run docker-compose:
 
 `docker-compose up`
 
-Go to
+Go to http://localhost:3000/
+
