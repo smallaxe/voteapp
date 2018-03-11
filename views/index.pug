@@ -9,21 +9,31 @@ html(language=en)
         script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js", integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS", crossorigin="anonymous")
     body
         .container
-            .jumbotron
+            .jumbotron(style="text-align:center;")
                 h1 Android or IOS?
             .row
                 .col-lg-3
                 .col-lg-3
                     .progress.progress-bar-vertical
                         .progress-bar.progress-bar-info(style="height:" + votes.android.percentage + "%;") ANDROID - #{votes.android.percentage}%
-                .col-lg-3.center-block
+                .col-lg-3
                     .progress.progress-bar-vertical
                         .progress-bar.progress-bar-success(style="height:" + votes.ios.percentage + "%;") IOS - #{votes.ios.percentage}%
+                .col-lg-3
+
             .row
                 .col-lg-3
+                .col-lg-3.text-center
+                    if !voteCookie
+                        a(href="/vote/android")
+                            button.btn.btn-success(type="button") Vote for Android
+                .col-lg-3.text-center
+                    if !voteCookie
+                        a(href="/vote/ios")
+                            button.btn.btn-success(type="button") Vote for IOS
                 .col-lg-3
-                    a(href="/vote/android")
-                        button.btn.btn-success(type="button") Vote for android
-                .col-lg-3
-                    a(href="/vote/ios")
-                        button.btn.btn-success(type="button") Vote for ios
+
+            if voteCookie
+                .row(style="text-align:center;")
+                    col-lg-12
+                        strong Your vote: #{voteCookie.toUpperCase()}

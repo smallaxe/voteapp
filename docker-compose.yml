@@ -5,9 +5,12 @@ services:
     restart: always
     build: .
     ports:
-      - "3001:3000"
+      - "3000:3000"
     links:
       - mongo
+    volumes:
+      - .:/usr/src/app
+ 
   mongo:
     container_name: mongo
     image: mongo

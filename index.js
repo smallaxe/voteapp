@@ -1,15 +1,22 @@
 const express = require('express');
 const app = express();
 const MongoClient = require('mongodb').MongoClient;
-
+var cookieParser = require('cookie-parser');
 var db;
+var cookie_name = 'voteapp_voted';
 
 app.set('views', './views');
 app.set('view engine', 'pug');
 app.use(express.static(__dirname + '/public'));
+app.use(cookieParser());
 
 app.get('/', function (req, res) {
-    var votes = {
+
+
+    // check vote cookie
+    let voteCookie = req.cookies[cookie_name];
+
+    let votes = {
         'android': {
             total: 0,
             percentage: 0
@@ -33,8 +40,7 @@ app.get('/', function (req, res) {
         votes.android.percentage = Math.round((votes.android.total / sum) * 100);
         votes.ios.percentage = Math.round((votes.ios.total / sum) * 100);
 
-        console.log(votes, sum);
-        res.render('index', {votes: votes});
+        res.render('index', { votes: votes, voteCookie: voteCookie });
 
     });
 
@@ -43,6 +49,7 @@ app.get('/', function (req, res) {
 app.get('/vote/android', function (req, res) {
     db.collection('votes').save({type: 'android', createdAt: new Date()}, (err, result) => {
         if(err) return console.log(err);
+        res.cookie(cookie_name , 'android', { expire : new Date() + 3600 });
         res.redirect('/');
     });
 })
@@ -51,11 +58,12 @@ app.get('/vote/android', function (req, res) {
 app.get('/vote/ios', function (req, res) {
     db.collection('votes').save({type: 'ios', createdAt: new Date()}, (err, result) => {
         if(err) return console.log(err)
+        res.cookie(cookie_name , 'ios', { expire : new Date() + 3600 });
         res.redirect('/');
     });
 })
 
-MongoClient.connect('mongodb://127.0.0.1', (err, client) => {
+MongoClient.connect('mongodb://mongo', (err, client) => {
     if(err) return console.log(err);
     db = client.db('votesapp');
     app.listen(3000, () => {
